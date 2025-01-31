@@ -17,3 +17,10 @@ export function initializeRootAdmin(username: string, password: string) {
 backendApi.get("/", (req, res) => {
   res.send("Backend initialized");
 });
+
+backendApi.post("/getPrompt", (req, res) => {
+  const { userText } = req.body;
+  // You can process userText here if needed
+  const response = `Your AI FOR THE DAY IS: 'You are a great person'`;
+  res.json({ message: response });
+});

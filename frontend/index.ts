@@ -5,8 +5,33 @@ import fs from "fs";
 const frontendApi = express.Router();
 
 // Serve the SSR home page
-frontendApi.get("/", (req, res) => {
-  res.render("index", { title: "SSR Home", message: "Welcome to SSR via frontendApi!",clothingItems:null });
+frontendApi.get("/", async (req, res) => {
+  // Call the backend API to get the prompt response
+  try {
+    const response = await fetch("http://localhost:3000/backend/getPrompt", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ userText: "Give me an AI prompt!" }) // Send user text as input
+    });
+    const data = await response.json();
+    console.log("data",data);
+    
+    res.render("index", { 
+      title: "SSR Home", 
+      message: "Welcome to SSR via frontendApi!", 
+      promptResponse: data.message || "No prompt response yet",
+      clothingItems: null 
+    });
+  } catch (error) {
+    console.error("Error fetching prompt:", error);
+    res.render("index", { 
+      title: "SSR Home", 
+      message: "Failed to get prompt response", 
+      clothingItems: null 
+    });
+  }
 });
 
 
