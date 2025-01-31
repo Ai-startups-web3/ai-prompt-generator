@@ -6,7 +6,7 @@ const frontendApi = express.Router();
 
 // Serve the SSR home page
 frontendApi.get("/", (req, res) => {
-  res.render("index", { title: "SSR Home", message: "Welcome to SSR via frontendApi!",clothingItems:[] });
+  res.render("index", { title: "SSR Home", message: "Welcome to SSR via frontendApi!",clothingItems:null });
 });
 
 
