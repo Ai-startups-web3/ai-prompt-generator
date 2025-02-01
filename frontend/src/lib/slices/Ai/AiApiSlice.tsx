@@ -21,10 +21,14 @@ export const fetchChatResponse = createAsyncThunk(
         },
       });
 
-      const botMessage: ChatMessage = response.choices[0].message;
-      dispatch(addMessage(botMessage)); // Dispatch bot's response
+      const botMessage: string = response.message;
+      console.log(botMessage);
+      
+      const botMessageObject: ChatMessage = { role: 'assistant', content: botMessage };
+      dispatch(addMessage(botMessageObject));
     } catch (error) {
       console.error('Error fetching response:', error);
+      throw error;
     } finally {
       dispatch(setLoading(false));
     }

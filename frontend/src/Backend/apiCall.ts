@@ -46,10 +46,6 @@ const Request = async ({ endpointId, slug, data, headers, params }: RequestOptio
       throw new Error(errorText);
     }
 
-    // Show success message if the response is successful
-    if (endpoint?.successMessage) {
-          alert(endpoint.successMessage);
-    }
 
     return response.data;  // Return the response data for further processing
   } catch (error) {
