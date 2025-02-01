@@ -17,7 +17,7 @@
     "index.ts",
     "frontend/**/*.ts",
     "backend/**/*.ts",
-    "auth/**/*.ts",
+    "auth/**/*.ts", "frontend/src/lib/StoreProvider.tsx",
   ],
   "exclude": [
     "node_modules",

@@ -4,7 +4,7 @@ import { Config } from "./DataTypes/interface"
 dotenv.config();
 
 const config: Config = {
-  port: parseInt(process.env.PORT || "3000", 10),
+  port: parseInt(process.env.PORT || "5000", 10),
   env: process.env.NODE_ENV || "development",
   rootAdmin: process.env.ROOT_ADMIN || "defaultAdmin",
   rootPassword: process.env.ROOT_PASSWORD || "defaultPassword",
