@@ -4,9 +4,8 @@ import App from './App.tsx'
 import StoreProvider from './lib/StoreProvider';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-     <StoreProvider>
-
-    <App />
-     </StoreProvider>
+    <StoreProvider>
+      <App />
+    </StoreProvider>
   </StrictMode>,
 )

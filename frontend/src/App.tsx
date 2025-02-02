@@ -5,12 +5,11 @@ function App() {
 
   return (
     <Container>
-    <Box sx={{ maxWidth: 400, margin: 'auto', mt: 4 }}>
-
-      <Typography variant="h4" gutterBottom>
-        Prompt Creator Website
-      </Typography>
-    </Box>
+      <Box sx={{ maxWidth: 400, margin: 'auto', mt: 4 }}>
+        <Typography variant="h4" gutterBottom>
+          Prompt Creator Website
+        </Typography>
+      </Box>
       <AISelectionForm />
     </Container>
   )

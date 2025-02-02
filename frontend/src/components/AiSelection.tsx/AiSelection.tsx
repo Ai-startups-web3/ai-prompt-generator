@@ -1,11 +1,10 @@
-import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useState } from 'react';
+import { Key, useState } from 'react';
 import { TextField, Button, Typography, Box, Paper, InputAdornment, FormControl, InputLabel, MenuItem, Select, Alert } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../lib/store';
 import { fetchChatResponse } from '../../lib/slices/Ai/AiApiSlice';
 import { selectChatMessages, selectLoading } from '../../lib/slices/Ai/AiSlice';
-import { parseMessageContent } from '../../scripts/handleAiResponse';
 import { AIModel } from '../../Datatypes/enums';
 import Markdown from 'react-markdown';
 
@@ -28,7 +27,7 @@ const AiPromptGenerator = () => {
       return;
     }
     setError('');
-    dispatch(fetchChatResponse({ userMessage: input,aiType:selectedAI }));
+    dispatch(fetchChatResponse({ userMessage: input, aiType: selectedAI }));
     setInput('');
   };
 
@@ -77,10 +76,9 @@ const AiPromptGenerator = () => {
                 <Avatar sx={{ marginRight: '8px' }}>AI</Avatar>
               )}
               <Box sx={{ maxWidth: '75%', wordWrap: 'break-word', padding: '8px', borderRadius: '20px', boxShadow: message.role === 'user' ? '0 1px 3px rgba(0,0,0,0.2)' : 'none' }}>
-
-              <Markdown>
-                    {message.content}
-                    </Markdown>
+                <Markdown>
+                  {message.content}
+                </Markdown>
               </Box>
             </Box>
           ))}
