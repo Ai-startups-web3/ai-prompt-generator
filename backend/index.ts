@@ -1,4 +1,5 @@
 import { Router } from "express";
+import AiRoutes from './(routes)/AiRoutes';
 
 export const backendApi = Router();
 
@@ -18,9 +19,8 @@ backendApi.get("/", (req, res) => {
   res.send("Backend initialized");
 });
 
-backendApi.post("/getPrompt", (req, res) => {
-  const { userText } = req.body;
-  // You can process userText here if needed
-  const response = `Your AI FOR THE DAY IS: 'You are a great person'`;
-  res.json({ message: response });
-});
+
+backendApi.use(
+  "/ai",
+  AiRoutes
+);
