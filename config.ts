@@ -11,6 +11,11 @@ const config: Config = {
   blockchainOwnerPublicKey: process.env.BLOCKCHAIN_OWNER_PUBLIC_KEY || "",
   pinataApiKey: process.env.PINATA_API_KEY || "",
   pinataApiSecret: process.env.PINATA_API_SECRET || "",
+
+
+
+  //api keys
+  openAiApiKey:process.env.OPENAI_API_KEY || "",
 };
 
 export default config;

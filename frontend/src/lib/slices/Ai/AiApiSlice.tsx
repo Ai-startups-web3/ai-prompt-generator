@@ -16,7 +16,7 @@ export const fetchChatResponse = createAsyncThunk(
       const response = await Request({
         endpointId: "AiPrompt", 
         data: {
-          messages: [{userMessage,aiType }],
+          userMessage,aiType
         },
       });
 

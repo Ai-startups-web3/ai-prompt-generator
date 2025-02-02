@@ -11,7 +11,7 @@ const handleError = (err: any, req: Request, res: Response, next: NextFunction) 
 
   // Customize the response structure (you can modify this based on your needs)
   const errorResponse = {
-    status: "error",
+    status,
     message,
     ...(process.env.NODE_ENV === "development" && { stack: err.stack }), // Show stack trace only in development
   };

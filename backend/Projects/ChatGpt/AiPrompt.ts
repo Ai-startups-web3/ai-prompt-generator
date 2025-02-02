@@ -1,6 +1,7 @@
 import axios from "axios";
+import config from "../../../config";
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const OPENAI_API_KEY = config.openAiApiKey
 const OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
 
 export const chatWithGPT = async (userMessage: string): Promise<string | null> => {
@@ -25,6 +26,6 @@ export const chatWithGPT = async (userMessage: string): Promise<string | null> =
 
         return response.data.choices[0].message.content;
     } catch (error) {
-        throw error; // Ensure the error is thrown so it can be caught by the catch block in GetPrompt
+        throw error;
     }
 };
