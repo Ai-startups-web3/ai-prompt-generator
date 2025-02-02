@@ -7,6 +7,7 @@ import { fetchChatResponse } from '../../lib/slices/Ai/AiApiSlice';
 import { selectChatMessages, selectLoading } from '../../lib/slices/Ai/AiSlice';
 import { parseMessageContent } from '../../scripts/handleAiResponse';
 import { AIModel } from '../../Datatypes/enums';
+import Markdown from 'react-markdown';
 
 const AiPromptGenerator = () => {
   const [input, setInput] = useState('');
@@ -76,13 +77,10 @@ const AiPromptGenerator = () => {
                 <Avatar sx={{ marginRight: '8px' }}>AI</Avatar>
               )}
               <Box sx={{ maxWidth: '75%', wordWrap: 'break-word', padding: '8px', borderRadius: '20px', boxShadow: message.role === 'user' ? '0 1px 3px rgba(0,0,0,0.2)' : 'none' }}>
-                {parseMessageContent(message?.content).map((part: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined, index: Key | null | undefined) => 
-                  typeof part === 'string' ? (
-                    <span key={index}>{part}</span>
-                  ) : (
-                    part
-                  )
-                )}
+
+              <Markdown>
+                    {message.content}
+                    </Markdown>
               </Box>
             </Box>
           ))}

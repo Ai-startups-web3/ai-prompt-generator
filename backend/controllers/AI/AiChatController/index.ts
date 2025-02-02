@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { chatWithGPT } from "../../../Projects/ChatGpt/AiPrompt";
 
 /**
- * Add a new course
+ * Add new reponse
  * @param req
  * @param res
  * @param next
