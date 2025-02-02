@@ -9,7 +9,7 @@ const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'API Documentation For C3I',
+      title: 'API Documentation For AI Chatbot',
       version: '1.0.0',
       description: 'API Information',
       contact: {

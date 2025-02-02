@@ -46,7 +46,7 @@ const AiPromptGenerator = () => {
         </Typography>
 
         {/* AI Selection Dropdown */}
-        <FormControl fullWidth sx={{ mt: 2 }}>
+        <FormControl sx={{ mt: 2 }}>
           <InputLabel id="ai-select-label">Select AI</InputLabel>
           <Select
             labelId="ai-select-label"
