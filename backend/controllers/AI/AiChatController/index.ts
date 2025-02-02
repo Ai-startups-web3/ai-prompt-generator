@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { chatWithGPT } from "../../../Projects/ChatGpt/AiPrompt";
 
 /**
  * Add a new course
@@ -13,9 +14,11 @@ export const GetPrompt = async (
 ) => {
   try {
     const { userMessage, aiType } = req.body;
- 
-    res.status(201).json({message:"This is ai reply"});
+
+    const message = await chatWithGPT(userMessage); // Make sure this is awaited
+
+    res.status(201).json({ message: message });
   } catch (error) {
-    next(error);
+    next(error); // Pass the error to the next middleware (handleError)
   }
 };

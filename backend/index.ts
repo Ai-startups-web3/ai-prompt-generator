@@ -1,7 +1,11 @@
 import { Router } from "express";
 import AiRoutes from './routes/AiRoutes';
-
-export const backendApi = Router();
+import handleError from "./middleware/errorHandler";
+import express from "express";
+import { ParamsDictionary } from "express-serve-static-core";
+import { ParsedQs } from "qs";
+import { ErrorObject } from "./DataTypes/types/IUserType";
+const router = express.Router({ mergeParams: true });
 
 // Initialize the root admin (optional logic)
 export let rootAdmin: { username: string; password: string } | null = null;
@@ -14,13 +18,11 @@ export function initializeRootAdmin(username: string, password: string) {
   console.log(`Root admin '${username}' initialized`);
 }
 
-// Add a root route for the backend API
-backendApi.get("/", (req, res) => {
-  res.send("Backend initialized");
-});
 
-
-backendApi.use(
+router.use(
   "/ai",
   AiRoutes
 );
+router.use(handleError);
+
+export default router

@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 //config from env file
 import config from "./config";
 // Importing modules from different folders
-import { initializeRootAdmin, backendApi } from "./backend";
+import router,{ initializeRootAdmin } from "./backend";
 import { authApi } from "./auth";
 import cors from 'cors';
 import { setupSwagger } from './swagger';
@@ -26,7 +26,7 @@ app.use(cors({
 setupSwagger(app);
 
 // Mount APIs
-app.use("/backend/v1", backendApi);
+app.use("/backend/v1", router);
 app.use("/auth", authApi);
 
 // Initialize Admin
