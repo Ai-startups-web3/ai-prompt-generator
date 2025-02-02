@@ -4,5 +4,11 @@ const base_url_backend="http://localhost:5000/backend/v1"
 
 // define endpoints here
   export const ApiEndpoint: Record<string, any> = {
-    AiPrompt: { apiId:1, withAuth:false, url: `${base_url_backend}/getPrompt`, method: 'POST', headers: { 'Content-Type': 'application/json'},loadingMessage:"Welcome",successMessage:"Sucees",errorMessage:"Error Getting Response"},
+    AiPrompt: { apiId:1, withAuth:false, url: `${base_url_backend}/ai`, method: 'POST', headers: { 'Content-Type': 'application/json'},loadingMessage:"Welcome",successMessage:"Sucees",errorMessage:"Error Getting Response"},
 };
+
+export enum AIModel {
+  Deepseek = 'Deepseek',
+  ChatGPT = 'ChatGPT',
+  Gemini = 'Gemini'
+}

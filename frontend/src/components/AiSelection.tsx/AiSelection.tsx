@@ -6,6 +6,7 @@ import { AppDispatch } from '../../lib/store';
 import { fetchChatResponse } from '../../lib/slices/Ai/AiApiSlice';
 import { selectChatMessages, selectLoading } from '../../lib/slices/Ai/AiSlice';
 import { parseMessageContent } from '../../scripts/handleAiResponse';
+import { AIModel } from '../../Datatypes/enums';
 
 const AiPromptGenerator = () => {
   const [input, setInput] = useState('');
@@ -26,7 +27,7 @@ const AiPromptGenerator = () => {
       return;
     }
     setError('');
-    dispatch(fetchChatResponse({ message: input }));
+    dispatch(fetchChatResponse({ userMessage: input,aiType:selectedAI }));
     setInput('');
   };
 
@@ -53,9 +54,9 @@ const AiPromptGenerator = () => {
             value={selectedAI}
             onChange={(e) => setSelectedAI(e.target.value)}
           >
-            <MenuItem value="Deepseek">Deepseek</MenuItem>
-            <MenuItem value="Chatgpt">ChatGPT</MenuItem>
-            <MenuItem value="Gemini">Gemini</MenuItem>
+            <MenuItem value={AIModel.Deepseek}>{AIModel.Deepseek}</MenuItem>
+            <MenuItem value={AIModel.ChatGPT}>{AIModel.ChatGPT}</MenuItem>
+            <MenuItem value={AIModel.Gemini}>{AIModel.Gemini}</MenuItem>
           </Select>
         </FormControl>
 

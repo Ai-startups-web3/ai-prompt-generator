@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { RequestOptions } from '../Datatypes/interfaces/interface';
+import { RequestOptions } from '../Datatypes/interface';
 import { ApiEndpoint } from '../Datatypes/enums';
 import Cookies from 'js-cookie';
 
