@@ -6,18 +6,17 @@ import Request from '../../../Backend/apiCall';
 
 export const fetchChatResponse = createAsyncThunk(
   'chat/fetchResponse',
-  async ({message}: {message:string}, { dispatch }) => {
+  async ({userMessage,aiType}: {userMessage:string,aiType:string}, { dispatch }) => {
     dispatch(setLoading(true));
 
-    const userMessage: ChatMessage = { role: 'user', content: message };
-    dispatch(addMessage(userMessage)); // Dispatch user message
+    const userNewMessage: ChatMessage = { role: 'user', content: userMessage };
+    dispatch(addMessage(userNewMessage));
 
     try {
       const response = await Request({
         endpointId: "AiPrompt", 
         data: {
-          model: 'gpt-3.5-turbo',
-          messages: [{ role: 'user', content: message }],
+          messages: [{userMessage,aiType }],
         },
       });
 

@@ -14,7 +14,7 @@ export const GetPrompt = async (
   try {
     const { userMessage, aiType } = req.body;
  
-    res.status(201).json({aiMessage:"This is ai reply"});
+    res.status(201).json({message:"This is ai reply"});
   } catch (error) {
     next(error);
   }
