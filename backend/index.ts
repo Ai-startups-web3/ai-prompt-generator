@@ -1,5 +1,5 @@
 import { Router } from "express";
-import AiRoutes from './(routes)/AiRoutes';
+import AiRoutes from './routes/AiRoutes';
 
 export const backendApi = Router();
 

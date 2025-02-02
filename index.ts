@@ -7,6 +7,7 @@ import config from "./config";
 import { initializeRootAdmin, backendApi } from "./backend";
 import { authApi } from "./auth";
 import cors from 'cors';
+import { setupSwagger } from './swagger';
 
 const app = express();
 const { port, env, rootAdmin, rootPassword } = config;
@@ -20,6 +21,9 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE','PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization', 'boundary'],
   }));
+
+// Setup Swagger
+setupSwagger(app);
 
 // Mount APIs
 app.use("/backend/v1", backendApi);
