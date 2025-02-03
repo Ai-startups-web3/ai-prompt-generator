@@ -12,5 +12,6 @@ export interface Config {
     blockchainOwnerPublicKey: string;
     pinataApiKey: string;
     pinataApiSecret: string;
-    openAiApiKey:string
+    openAiApiKey:string;
+    deepseekApiKey:string;
   }

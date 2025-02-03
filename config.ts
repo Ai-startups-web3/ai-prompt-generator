@@ -16,6 +16,7 @@ const config: Config = {
 
   //api keys
   openAiApiKey:process.env.OPENAI_API_KEY || "",
+  deepseekApiKey:process.env.DEEPSEEK_API_KEY || "",
 };
 
 export default config;
