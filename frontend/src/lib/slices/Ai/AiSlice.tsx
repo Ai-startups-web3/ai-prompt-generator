@@ -6,7 +6,7 @@ export interface ChatMessage {
   content: string;
 }
 
-interface ChatState {
+export interface ChatState {
   messages: ChatMessage[];
   loading: boolean;
 }

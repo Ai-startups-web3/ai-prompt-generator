@@ -5,7 +5,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc && cd frontend && npm run build",
-    "start": "concurrently \"node dist/index.js\" \"cd frontend && npm run start\"",
+    "start": "concurrently \"node dist/index.js\" \"cd frontend && npm run preview\"",
     "dev": "concurrently \"nodemon --exec ts-node index.ts\" \"cd frontend && npm run dev\"",
     "clean": "rm -rf dist"
   },

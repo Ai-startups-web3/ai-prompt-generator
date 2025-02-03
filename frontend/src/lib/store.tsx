@@ -9,15 +9,12 @@ export const makeStore = () => {
         // auth:authReducer,
         aiChat: chatReducer,
     }, 
-    // middleware:getDefaultMiddlerware =>
-    //   getDefaultMiddlerware().concat(logger),
-    //   devTools:true
   })
 }
 
 // Infer the type of makeStore
 export type AppStore = ReturnType<typeof makeStore>
-// Infer the `RootState` and `AppDispatch` types from the store itself
+// Use `ReturnType<typeof chatReducer>` instead of ChatState
 export type RootState = ReturnType<AppStore['getState']>
 export type AppDispatch = AppStore['dispatch']
 export type AppThunk<ReturnType = void> = ThunkAction<

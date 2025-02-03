@@ -3,7 +3,7 @@ import { RequestOptions } from '../Datatypes/interface';
 import { ApiEndpoint } from '../Datatypes/enums';
 import Cookies from 'js-cookie';
 
-const chatGptApiKey = import.meta.env.VITE_OPENAI_API_KEY; 
+const chatGptApiKey =" import.meta.env.VITE_OPENAI_API_KEY; "
 
 const Request = async ({ endpointId, slug, data, headers, params }: RequestOptions) => {
   const storedAccessToken = Cookies.get('access');  // Retrieve stored access token
@@ -54,7 +54,7 @@ const Request = async ({ endpointId, slug, data, headers, params }: RequestOptio
         alert(endpoint?.errorMessage);
     }
 
-    console.error("Request error:", error);
+    console.error("Request error:", error,headers);
     throw error;  // Re-throw the error for further handling
   }
 };
