@@ -7,7 +7,7 @@ const DEEPSEEK_URL = "https://api.openai.com/v1/chat/completions";
 export const chatWithDeepSeek = async (userMessage: string): Promise<string | null> => {
     try {
         if (!DEEPSEEK_KEY) {
-            throw new Error("Missing OpenAI API Key. Please set DEEPSEEK_KEY in your environment variables.");
+            throw new Error("Missing Deepseek API Key. Please set DEEPSEEK_KEY in your environment variables.");
         }
         const response = await axios.post(
             DEEPSEEK_URL,

@@ -50,7 +50,7 @@ export const MarkdownBlock: FC<Props> = ({
       <Box
         sx={{
           p: 2,
-          height: '500px',
+          maxHeight: '500px',
           bgcolor: '#1A1B26',
           color: 'white',
           overflow: 'auto',

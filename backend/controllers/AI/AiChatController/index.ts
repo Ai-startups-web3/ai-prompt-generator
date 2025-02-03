@@ -14,10 +14,11 @@ export const GetPrompt = async (
   next: NextFunction
 ) => {
   try {
-    const { userMessage, aiType } = req.body;
-
-    const message = await chatWithGPT(userMessage); // Make sure this is awaited
-    const message2 = await chatWithDeepSeek(userMessage); // Make sure this is awaited
+    const { userMessage, aiType,history } = req.body;
+    console.log(history);
+    
+    const message = await chatWithGPT(userMessage,history.messages); // Make sure this is awaited
+    // const message2 = await chatWithDeepSeek(userMessage); // Make sure this is awaited
 
     res.status(201).json({ message: message });
   } catch (error) {

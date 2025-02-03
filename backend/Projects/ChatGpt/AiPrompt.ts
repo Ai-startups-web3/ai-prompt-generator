@@ -4,16 +4,21 @@ import config from "../../../config";
 const OPENAI_API_KEY = config.openAiApiKey
 const OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
 
-export const chatWithGPT = async (userMessage: string): Promise<string | null> => {
+export const chatWithGPT = async (userMessage: string,history:any[]): Promise<string | null> => {
     try {
         if (!OPENAI_API_KEY) {
             throw new Error("Missing OpenAI API Key. Please set OPENAI_API_KEY in your environment variables.");
         }
+        const messages = [
+            ...history, // Include previous messages
+            { role: "user", content: userMessage }
+        ];
+
         const response = await axios.post(
             OPENAI_API_URL,
             {
                 model: "gpt-4o-mini",
-                messages: [{ role: "user", content: userMessage }],
+                messages,
                 temperature: 0.7,
             },
             {
