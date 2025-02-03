@@ -6,7 +6,7 @@ import { AppDispatch } from '../../lib/store';
 import { fetchChatResponse } from '../../lib/slices/Ai/AiApiSlice';
 import { selectChatMessages, selectLoading } from '../../lib/slices/Ai/AiSlice';
 import { AIModel } from '../../Datatypes/enums';
-import Markdown from 'react-markdown';
+import { MarkdownBlock } from '../Markdown';
 
 const AiPromptGenerator = () => {
   const [input, setInput] = useState('');
@@ -76,9 +76,7 @@ const AiPromptGenerator = () => {
                 <Avatar sx={{ marginRight: '8px' }}>AI</Avatar>
               )}
               <Box sx={{ maxWidth: '75%', wordWrap: 'break-word', padding: '8px', borderRadius: '20px', boxShadow: message.role === 'user' ? '0 1px 3px rgba(0,0,0,0.2)' : 'none' }}>
-                <Markdown>
-                  {message.content}
-                </Markdown>
+                <MarkdownBlock code={message.content} />
               </Box>
             </Box>
           ))}
