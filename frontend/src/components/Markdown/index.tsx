@@ -10,8 +10,8 @@ interface Props {
 
 export const MarkdownBlock: FC<Props> = ({
   code,
-  editable = false,
-  onChange = () => {},
+  // editable = false,
+  // onChange = () => {},
 }) => {
   const [copyText, setCopyText] = useState<string>('Copy');
 
