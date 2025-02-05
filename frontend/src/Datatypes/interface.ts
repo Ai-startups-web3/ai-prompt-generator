@@ -4,4 +4,5 @@ export interface RequestOptions {
   data?:object;
   headers?:any;
   params?:any;
+  isStream?:boolean;
 }

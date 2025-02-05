@@ -1,16 +1,26 @@
-import { Box, Container, Typography } from '@mui/material'
-import AISelectionForm from './components/AiSelection.tsx/AiSelection'
+import { Box, Container } from '@mui/material'
+import AiPromptGenerator from './components/AiSelection/AiPromptGenerator'
+import NewChatButton from './components/AiSelection/NewChat'
+import AISelectionForm from './components/AiSelection/AISelectionForm';
+import { useState } from 'react';
 
 function App() {
+  const [selectedAI, setSelectedAI] = useState('Deepseek');
 
   return (
     <Container>
-      <Box sx={{ maxWidth: 400, margin: 'auto', mt: 4 }}>
-        <Typography variant="h4" gutterBottom>
-          Prompt Creator Website
-        </Typography>
+      <Box sx={{
+        display:"flex",
+        justifyContent:"space-between"
+      }}>
+
+      {/* New Chat Button */}
+      <NewChatButton />
+      {/* AI and Chat Selection */}
+      <AISelectionForm selectedAI={selectedAI} setSelectedAI={setSelectedAI} />
       </Box>
-      <AISelectionForm />
+
+      <AiPromptGenerator />
     </Container>
   )
 }

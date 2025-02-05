@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';  // Import UUID library
 
 export interface ChatMessage {
+  id: string;
   role: string; 
   // 'user' or 'assistant'
   content: string;
@@ -18,16 +19,16 @@ export interface ChatState {
   activeHistoryId: string | null;
 }
 
-const newChatId=uuidv4()
+const initialChatId=uuidv4()
 
 const initialState: ChatState = {
   histories: [
     {
-      historyId: newChatId,
-      messages: [{ role: 'assistant', content: 'Welcome to your new chat session!' }],
+      historyId: initialChatId,
+      messages: [{id: uuidv4(), role: 'assistant', content: 'Welcome to your new chat session!' }],
     },
   ],
-  activeHistoryId: newChatId,
+  activeHistoryId: initialChatId,
   loading: false,
 };
 
@@ -44,6 +45,21 @@ const chatSlice = createSlice({
       }
       history.messages.push(message);
     },
+
+    updateContent: (state, action: PayloadAction<{ historyId: string; messageId: string; newContent: string }>) => {
+      console.log("logging");
+      
+      const { historyId, messageId, newContent } = action.payload;
+      console.log(historyId,messageId,newContent);
+      
+      const history = state.histories.find(h => h.historyId === historyId);
+      if (history) {
+        const message = history.messages.find(m => m.id === messageId);
+        if (message) {
+          message.content = newContent;
+        }
+      }
+    },
     setActiveHistory: (state, action: PayloadAction<string>) => {
       state.activeHistoryId = action.payload;
     },
@@ -59,7 +75,7 @@ const chatSlice = createSlice({
   },
 });
 
-export const { addMessage, setLoading,  setActiveHistory, clearMessages  } = chatSlice.actions;
+export const { addMessage,updateContent, setLoading,  setActiveHistory, clearMessages  } = chatSlice.actions;
 
 export default chatSlice.reducer;
 

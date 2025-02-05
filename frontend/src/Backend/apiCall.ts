@@ -5,8 +5,8 @@ import Cookies from 'js-cookie';
 
 const chatGptApiKey =" import.meta.env.VITE_OPENAI_API_KEY; "
 
-const Request = async ({ endpointId, slug, data, headers, params }: RequestOptions) => {
-  const storedAccessToken = Cookies.get('access');  // Retrieve stored access token
+const Request = async ({ endpointId, slug, data, headers, params, isStream = false }: RequestOptions) => {
+  const storedAccessToken = Cookies.get('access');
   const endpoint = ApiEndpoint[endpointId];
 
   if (!endpoint) {
@@ -15,48 +15,84 @@ const Request = async ({ endpointId, slug, data, headers, params }: RequestOptio
 
   let fullUrl = endpoint.url;
   if (slug) {
-    fullUrl += `${slug}`;  // Append additional slug to URL if provided
+    fullUrl += `${slug}`;
   }
 
+  if (isStream) {
+    // Use fetch for streaming
+    const response = await fetch(fullUrl, {
+      method: endpoint.method,
+      headers: {
+        ...endpoint.headers,
+        Authorization: endpoint.isChatGpt ? `Bearer ${chatGptApiKey}` : endpoint.withAuth ? `Bearer ${storedAccessToken}` : undefined,
+        "Accept": "text/event-stream"
+      },
+      body: endpoint.method !== 'GET' ? JSON.stringify(data) : undefined
+    });
+
+    if (!response.body) throw new Error("No response body");
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+
+    return {
+      async *stream() {
+        let buffer = "";
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+    
+          buffer += decoder.decode(value, { stream: true });
+    
+          // Process complete JSON objects in buffer
+          const lines = buffer.split("\n");
+          buffer = ""; // Reset buffer after processing
+    
+          for (const line of lines) {
+            if (!line.startsWith("data: ")) continue;
+            
+            const data = line.replace("data: ", "").trim();
+            if (data === "[DONE]") return;
+    
+            try {
+              const parsed = JSON.parse(data);
+              // Ensure yielding a full sentence instead of partial words
+              if (parsed.message) yield parsed.message;
+            } catch (error) {
+              console.error("Error parsing stream:", error);
+            }
+          }
+        }
+      }
+    };
+    
+  }
+
+  // Use Axios for non-streaming requests
   const axiosConfig: AxiosRequestConfig = {
     method: endpoint.method,
     url: fullUrl,
     headers: {
       ...endpoint.headers,
-      // Use the appropriate Authorization header based on the endpoint type
-      Authorization: endpoint.isChatGpt ? `Bearer ${chatGptApiKey}` : endpoint.withAuth ? `Bearer ${storedAccessToken}` : undefined
+      Authorization: endpoint.isChatGpt ? `Bearer ${chatGptApiKey}` : endpoint.withAuth ? `Bearer ${storedAccessToken}` : undefined,
+      "Accept": "application/json"
     },
-    params: params  // Add query parameters if provided
+    params: params
   };
 
-  // Check and set appropriate data for non-GET requests
   if (endpoint.method !== 'GET') {
     axiosConfig.data = data;
   }
 
   try {
     const response = await axios(axiosConfig);
-
-    // Log response data for debugging
-    console.log("Response Data:", response.data);
-
-    // Handle unsuccessful response
-    if (response.status < 200 || response.status >= 300) {
-      const errorText = response.data?.error || response.data?.message || endpoint.errorMessage || "Unexpected error occurred.";
-      throw new Error(errorText);
-    }
-
-
-    return response.data;  // Return the response data for further processing
+    return response.data;
   } catch (error) {
-
-    if ( endpoint?.errorMessage) {
-        alert(endpoint?.errorMessage);
-    }
-
-    console.error("Request error:", error,headers);
-    throw error;  // Re-throw the error for further handling
+    console.error("Request error:", error);
+    throw error;
   }
 };
 
+
 export default Request;
+
