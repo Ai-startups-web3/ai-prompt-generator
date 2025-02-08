@@ -30,11 +30,12 @@ export const GetPrompt = async (req: Request, res: Response, next: NextFunction)
             message += chunk;
             res.write(`data: ${JSON.stringify({ message: chunk })}\n\n`);
         }
- 
+
+        const imagePrompt = generateImagePrompt(message);
         // Generate an image based on the chat output
         const imageResponse = await openai.images.generate({
             model: "dall-e-3",
-            prompt: message.trim(), // Use the chat output as the image prompt
+            prompt: imagePrompt, // Use the chat output as the image prompt
         });
 
         console.log("creating image");
@@ -44,8 +45,23 @@ export const GetPrompt = async (req: Request, res: Response, next: NextFunction)
         res.write(`data: ${JSON.stringify({ image: imageResponse.data[0]?.url })}\n\n`);
         res.write("data: [DONE]\n\n");
         res.end();
-        
+
     } catch (error) {
         next(error);
     }
 };
+
+
+/**
+ * Generate an image prompt for DALL·E based on JSON data
+ */
+function generateImagePrompt(message: any): string {
+    return `
+Create a visually engaging image related to the topic: "${message}". 
+
+- The image should represent: ${message} || "a professional concept."}
+- Style: Modern, clean, and visually appealing.
+- Format: Suitable for LinkedIn posts.
+- Avoid text in the image.
+`;
+}
