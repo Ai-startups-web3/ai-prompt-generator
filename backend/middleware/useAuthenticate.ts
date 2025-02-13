@@ -1,13 +1,12 @@
 import admin from "firebase-admin";
 import { Request, Response, NextFunction } from "express";
 
-
-var serviceAccount = require("../../etc/secrets/ai-prompyt-firebase-adminsdk-fbsvc-442434e46c.json");
+const firebaseCredentials = JSON.parse(process.env.FIREBASE_CREDENTIALS || "{}");
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL:"https://ai-prompyt.firebaseapp.com"
-});
+    credential: admin.credential.cert(firebaseCredentials),
+    databaseURL: "https://ai-prompyt.firebaseapp.com"
+  });
 
 
 export interface AuthenticatedRequest extends Request {
