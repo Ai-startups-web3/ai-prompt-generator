@@ -4,6 +4,7 @@ import OpenAI from "openai";
 import config from "../../../../config";
 import { chatWithDeepSeek } from "../../../Projects/Deepseek/AiPrompt";
 import { chatWithGemini } from "../../../Projects/Gemini/AiPrompt";
+import { AuthenticatedRequest } from "../../../middleware/useAuthenticate";
 
 const openai = new OpenAI({ apiKey: config.openAiApiKey });
 
@@ -13,7 +14,7 @@ const openai = new OpenAI({ apiKey: config.openAiApiKey });
  * @param res
  * @param next
  */
-export const GetPrompt = async (req: Request, res: Response, next: NextFunction) => {
+export const GetPrompt = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
         const { userMessage, aiType="chatgpt", history } = req.body;
         console.log(aiType);
