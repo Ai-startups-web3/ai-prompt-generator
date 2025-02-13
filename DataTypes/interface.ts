@@ -14,4 +14,5 @@ export interface Config {
     pinataApiSecret: string;
     openAiApiKey:string;
     deepseekApiKey:string;
+    geminiApiKey:string;
   }

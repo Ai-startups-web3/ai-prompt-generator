@@ -1,31 +1,51 @@
 import axios from "axios";
 import config from "../../../config";
+import OpenAI from "openai";
 
-const DEEPSEEK_KEY = config.deepseekApiKey
-const DEEPSEEK_URL = "https://api.openai.com/v1/chat/completions";
 
-export const chatWithDeepSeek = async (userMessage: string): Promise<string | null> => {
+const openai = new OpenAI({
+    baseURL: "https://api.deepseek.com",
+    apiKey: config.deepseekApiKey
+});
+
+
+export const chatWithDeepSeek = async function* (userMessage: string, history: any[]): AsyncGenerator<string, void, unknown> {
     try {
-        if (!DEEPSEEK_KEY) {
-            throw new Error("Missing Deepseek API Key. Please set DEEPSEEK_KEY in your environment variables.");
+        if (!config.deepseekApiKey) {
+            throw new Error("Missing DeepSeel API Key. Please set DEEPSEEK_API_KEY in your environment variables.");
         }
-        const response = await axios.post(
-            DEEPSEEK_URL,
-            {
-                model: "deepseek-4o-mini",
-                messages: [{ role: "user", content: userMessage }],
-                temperature: 0.7,
-            },
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${DEEPSEEK_KEY}`,
-                },
-            }
-        );
 
-        return response.data.choices[0].message.content;
+        const formattedPrompt = generateDeepSeekPrompt(userMessage);
+
+        const messages = [
+            ...history, // Include previous messages
+            { role: "user", content: formattedPrompt }
+        ];
+
+        const stream = await openai.chat.completions.create({
+            model: "deepseek-chat",
+            messages,
+            temperature: 0.7,
+            stream: true, // Enable streaming
+        });
+
+        for await (const chunk of stream) {
+            const delta = chunk.choices[0]?.delta?.content;
+            if (delta) {
+                yield delta; // Send each streamed piece
+            }
+        }
     } catch (error) {
+        console.error("Error fetching response from Deepseek:", error);
         throw error;
     }
 };
+
+/**
+ * Function to generate a LinkedIn post prompt based on JSON data.
+ */
+function generateDeepSeekPrompt(userMessage: any): string {
+    return `
+General Information ${userMessage || "General Information"}
+`
+}
