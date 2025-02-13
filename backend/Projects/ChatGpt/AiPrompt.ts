@@ -40,15 +40,7 @@ export const chatWithGPT = async function* (userMessage: string, history: any[])
  */
 function generateLinkedInPrompt(userMessage: any): string {
     return `
-You are a social media assistant who specializes in writing engaging LinkedIn posts. 
-
-Based on the following data, create a professional and engaging LinkedIn post not more then 120 words:
-
-- **Topic**: ${userMessage || "General Information"}
-- **Key Points**:  "Engage, human text, authentic."
-- **Tone**: "Professional and engaging"
-
-Make sure the post is compelling, easy to read, and includes a clear message. Avoid hashtags unless necessary.
+General Information ${userMessage || "General Information"}
 `;
 }
 
