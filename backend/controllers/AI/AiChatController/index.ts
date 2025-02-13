@@ -27,7 +27,7 @@ export const GetPrompt = async (req: Request, res: Response, next: NextFunction)
         if (aiType=="Deepseek"){
             stream=chatWithDeepSeek(userMessage, history.messages);
         }
-        else if (aiType=="gemini"){
+        else if (aiType=="Gemini"){
             stream = chatWithGemini(userMessage, history.messages);
         }
         else{

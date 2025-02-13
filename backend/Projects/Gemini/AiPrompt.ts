@@ -4,6 +4,9 @@ import config from "../../../config";
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
+// Api docs for Gemini
+// https://ai.google.dev/gemini-api/docs/text-generation?lang=node
+
 export const chatWithGemini = async function* (userMessage: string, history: any[]): AsyncGenerator<string, void, unknown> {
     try {
         if (!config.geminiApiKey) {
@@ -17,9 +20,7 @@ export const chatWithGemini = async function* (userMessage: string, history: any
             { role: "user", content: formattedPrompt }
         ];
 
-        const result = await model.generateContentStream({
-            contents: messages.map((msg) => ({ role: msg.role, parts: [{ text: msg.content }] })),
-          });
+        const result = await model.generateContentStream(formattedPrompt);
       
           for await (const chunk of result.stream) {
             const chunkText = await chunk.text(); // Extract chunk text
