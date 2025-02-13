@@ -2,7 +2,7 @@ import admin from "firebase-admin";
 import { Request, Response, NextFunction } from "express";
 
 
-var serviceAccount = require("../../ai-prompyt-firebase-adminsdk-fbsvc-442434e46c.json");
+var serviceAccount = require("../../etc/secrets/ai-prompyt-firebase-adminsdk-fbsvc-442434e46c.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
