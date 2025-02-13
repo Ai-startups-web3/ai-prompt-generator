@@ -1,6 +1,6 @@
 import express from "express";
 import { authenticateUser } from "../../middleware/useAuthenticate";
-import { checkPaymentStatus, createCheckoutSession, handleWebhook } from "../../controllers/Payment/PaymentsController";
+import { checkPaymentStatus, createCheckoutSession, handleWebhook, verifyPayment } from "../../controllers/Payment/PaymentsController";
 
 const router = express.Router();
 
@@ -114,5 +114,40 @@ router.post("/webhook", express.raw({ type: "application/json" }), handleWebhook
  *         description: Server error
  */
 router.get("/check-payment", authenticateUser, checkPaymentStatus);
+
+/**
+ * @swagger
+ * /payments/verify-payment:
+ *   post:
+ *     summary: Verify Razorpay payment and update user subscription status
+ *     tags:
+ *       - Payments
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               razorpay_payment_id:
+ *                 type: string
+ *               razorpay_order_id:
+ *                 type: string
+ *               razorpay_signature:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Payment verified and user updated
+ *       400:
+ *         description: Invalid payment details
+ *       401:
+ *         description: User not authenticated
+ *       500:
+ *         description: Server error
+ */
+router.post("/verify-payment", authenticateUser, verifyPayment);
+
 
 export default router;

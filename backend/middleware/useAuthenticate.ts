@@ -1,12 +1,15 @@
 import admin from "firebase-admin";
 import { Request, Response, NextFunction } from "express";
-import { applicationDefault, initializeApp } from "firebase-admin/app";
 
 
-initializeApp({
-    credential: applicationDefault(),
-    projectId: "ai-prompyt",
-  });
+var serviceAccount = require("../../ai-prompyt-firebase-adminsdk-fbsvc-442434e46c.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL:"https://ai-prompyt.firebaseapp.com"
+});
+
+
 export interface AuthenticatedRequest extends Request {
     userId?: string;
 }
@@ -22,7 +25,6 @@ export const authenticateUser = async (
         res.status(401).json({ error: "Unauthorized" });
         return;
     }
-    console.log("Received token:", token); // Log the token to debug
 
     try {
         const decodedToken = await admin.auth().verifyIdToken(token);
