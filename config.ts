@@ -6,22 +6,22 @@ dotenv.config();
 const config: Config = {
   port: parseInt(process.env.PORT || "5000", 10),
   env: process.env.NODE_ENV || "development",
+
+  //admin info
   rootAdmin: process.env.ROOT_ADMIN || "defaultAdmin",
   rootPassword: process.env.ROOT_PASSWORD || "defaultPassword",
   blockchainOwnerPublicKey: process.env.BLOCKCHAIN_OWNER_PUBLIC_KEY || "",
   pinataApiKey: process.env.PINATA_API_KEY || "",
   pinataApiSecret: process.env.PINATA_API_SECRET || "",
 
-
-
   //api keys
-  openAiApiKey:process.env.OPENAI_API_KEY || "",
-  deepseekApiKey:process.env.DEEPSEEK_API_KEY || "",
-  geminiApiKey:process.env.GEMINI_API_KEY || "",
+  openAiApiKey: process.env.OPENAI_API_KEY || "",
+  deepseekApiKey: process.env.DEEPSEEK_API_KEY || "",
+  geminiApiKey: process.env.GEMINI_API_KEY || "",
 
-    // Stripe Payment Config
-    razorpayKeyId: process.env.STRIPE_SECRET_KEY || "",
-    razorpayKeySecret: process.env.STRIPE_PRICE_ID || "",
-};
+  // Razorpay Payment Config
+  razorpayKeyId: process.env.RAZORPAY_KEY_ID || "",
+  razorpayKeySecret: process.env.RAZORPAY_KEY_SECRET || "",
+}
 
 export default config;

@@ -1,10 +1,9 @@
 import { Router } from "express";
 import AiRoutes from './routes/AiRoutes';
+import PaymentRoutes from './routes/payment';
 import handleError from "./middleware/errorHandler";
 import express from "express";
-import { ParamsDictionary } from "express-serve-static-core";
-import { ParsedQs } from "qs";
-import { ErrorObject } from "./DataTypes/types/IUserType";
+
 const router = express.Router({ mergeParams: true });
 
 // Initialize the root admin (optional logic)
@@ -22,6 +21,10 @@ export function initializeRootAdmin(username: string, password: string) {
 router.use(
   "/ai",
   AiRoutes
+);
+router.use(
+  "/payment",
+  PaymentRoutes
 );
 router.use(handleError);
 
