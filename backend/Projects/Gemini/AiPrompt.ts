@@ -17,14 +17,16 @@ export const chatWithGemini = async function* (userMessage: string, history: any
             { role: "user", content: formattedPrompt }
         ];
 
-        const result = await model.generateContentStream(formattedPrompt);
-
-        for await (const chunk of result.stream) {
-            const chunkText = await chunk.text(); // Await text extraction
+        const result = await model.generateContentStream({
+            contents: messages.map((msg) => ({ role: msg.role, parts: [{ text: msg.content }] })),
+          });
+      
+          for await (const chunk of result.stream) {
+            const chunkText = await chunk.text(); // Extract chunk text
             if (chunkText) {
-                yield chunkText; 
+              yield chunkText;
             }
-        }
+          }
 
     } catch (error) {
         console.error("Error fetching response from Gemini:", error);
