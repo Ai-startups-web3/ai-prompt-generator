@@ -2,6 +2,7 @@ import express from "express";
 import {
     GetPrompt,
 } from "../../controllers/AI/AiChatController";
+import { authenticateUser } from "../../middleware/useAuthenticate";
 
 const router = express.Router();
 
@@ -43,6 +44,9 @@ const router = express.Router();
  *         description: Internal server error
  */
 
-router.post("/getPrompt", GetPrompt);
+router.post("/getPrompt",authenticateUser, GetPrompt);
+
+
+
 
 export default router;

@@ -18,6 +18,10 @@ const config: Config = {
   openAiApiKey:process.env.OPENAI_API_KEY || "",
   deepseekApiKey:process.env.DEEPSEEK_API_KEY || "",
   geminiApiKey:process.env.GEMINI_API_KEY || "",
+
+    // Stripe Payment Config
+    razorpayKeyId: process.env.STRIPE_SECRET_KEY || "",
+    razorpayKeySecret: process.env.STRIPE_PRICE_ID || "",
 };
 
 export default config;

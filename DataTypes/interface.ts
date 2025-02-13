@@ -15,4 +15,8 @@ export interface Config {
     openAiApiKey:string;
     deepseekApiKey:string;
     geminiApiKey:string;
+
+    //payment
+    razorpayKeyId:string;
+    razorpayKeySecret:string;
   }
