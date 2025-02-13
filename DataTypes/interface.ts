@@ -16,6 +16,9 @@ export interface Config {
     deepseekApiKey:string;
     geminiApiKey:string;
 
+    //firebase
+    firebaseCred:any;
+
     //payment
     razorpayKeyId:string;
     razorpayKeySecret:string;

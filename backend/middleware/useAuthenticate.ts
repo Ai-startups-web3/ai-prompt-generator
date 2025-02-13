@@ -1,7 +1,8 @@
 import admin from "firebase-admin";
 import { Request, Response, NextFunction } from "express";
+import config from "../../config";
 
-const firebaseCredentials = JSON.parse(process.env.FIREBASE_CREDENTIALS || "{}");
+const firebaseCredentials = JSON.parse(config.firebaseCred);
 
 admin.initializeApp({
     credential: admin.credential.cert(firebaseCredentials),
