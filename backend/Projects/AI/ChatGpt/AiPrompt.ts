@@ -1,21 +1,16 @@
-import axios from "axios";
-import config from "../../../config";
 import OpenAI from "openai";
+import config from "../../../../config";
+import { PromptType } from "../../../DataTypes/enums/enum";
 
+const openai = new OpenAI({ apiKey: config.openAiApiKey });
 
-const openai = new OpenAI({
-    baseURL: "https://api.deepseek.com",
-    apiKey: config.deepseekApiKey
-});
-
-
-export const chatWithDeepSeek = async function* (userMessage: string, history: any[]): AsyncGenerator<string, void, unknown> {
+export const chatWithGPT = async function* (userMessage: string, history: any[],promptType:PromptType): AsyncGenerator<string, void, unknown> {
     try {
-        if (!config.deepseekApiKey) {
-            throw new Error("Missing DeepSeel API Key. Please set DEEPSEEK_API_KEY in your environment variables.");
+        if (!config.openAiApiKey) {
+            throw new Error("Missing OpenAI API Key. Please set OPENAI_API_KEY in your environment variables.");
         }
 
-        const formattedPrompt = generateDeepSeekPrompt(userMessage);
+        const formattedPrompt = generatePrompt(userMessage);
 
         const messages = [
             ...history, // Include previous messages
@@ -23,7 +18,7 @@ export const chatWithDeepSeek = async function* (userMessage: string, history: a
         ];
 
         const stream = await openai.chat.completions.create({
-            model: "deepseek-chat",
+            model: "gpt-4o",
             messages,
             temperature: 0.7,
             stream: true, // Enable streaming
@@ -36,7 +31,7 @@ export const chatWithDeepSeek = async function* (userMessage: string, history: a
             }
         }
     } catch (error) {
-        console.error("Error fetching response from Deepseek:", error);
+        console.error("Error fetching response from OpenAI:", error);
         throw error;
     }
 };
@@ -44,8 +39,9 @@ export const chatWithDeepSeek = async function* (userMessage: string, history: a
 /**
  * Function to generate a LinkedIn post prompt based on JSON data.
  */
-function generateDeepSeekPrompt(userMessage: any): string {
+function generatePrompt(userMessage: any): string {
     return `
 General Information ${userMessage || "General Information"}
-`
+`;
 }
+

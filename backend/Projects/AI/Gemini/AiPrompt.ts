@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import config from "../../../config";
+import config from "../../../../config";
+import { PromptType } from "../../../DataTypes/enums/enum";
 
 const genAI = new GoogleGenerativeAI(config.geminiApiKey);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -7,7 +8,7 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 // Api docs for Gemini
 // https://ai.google.dev/gemini-api/docs/text-generation?lang=node
 
-export const chatWithGemini = async function* (userMessage: string, history: any[]): AsyncGenerator<string, void, unknown> {
+export const chatWithGemini = async function* (userMessage: string, history: any[],promptType:PromptType): AsyncGenerator<string, void, unknown> {
     try {
         if (!config.geminiApiKey) {
             throw new Error("Missing Gemini API Key. Please set GEMINI_API_KEY in your environment variables.");
