@@ -69,21 +69,16 @@ export const GetPrompt = async (req: AuthenticatedRequest, res: Response, next: 
             console.log(`Saved new chat history with ID ${historyId} in Firebase.`);
         }
 
-        // Set response headers for streaming
-        res.setHeader("Content-Type", "text/event-stream");
-        res.setHeader("Cache-Control", "no-cache");
-        res.setHeader("Connection", "keep-alive");
-
         // Step 1: Always generate a text response first using the selected AI
         let textResponse = "";
         let stream: AsyncIterable<string> | undefined;
 
         if (aiType == "Deepseek") {
-            stream = chatWithDeepSeek(userMessage, historyMessages,promptType);
+            stream = chatWithDeepSeek(userMessage, historyMessages, promptType);
         } else if (aiType == "Gemini") {
-            stream = chatWithGemini(userMessage, historyMessages,promptType);
+            stream = chatWithGemini(userMessage, historyMessages, promptType);
         } else {
-            stream = chatWithGPT(userMessage, historyMessages,promptType);
+            stream = chatWithGPT(userMessage, historyMessages, promptType);
         }
 
         if (!stream) {
@@ -92,7 +87,7 @@ export const GetPrompt = async (req: AuthenticatedRequest, res: Response, next: 
 
         for await (const chunk of stream) {
             textResponse += chunk;
-            if (promptType === PromptType.TEXT) {
+            if (promptType === PromptType.TEXT || promptType === PromptType.LINKEDIN_PROFILE || promptType === PromptType.LINKEDIN_POST) {
                 // Stream the text response back to the client
                 res.write(`data: ${JSON.stringify({ message: chunk })}\n\n`);
             }
@@ -101,24 +96,23 @@ export const GetPrompt = async (req: AuthenticatedRequest, res: Response, next: 
         // Step 2: Use the generated text response for further processing based on promptType
         let finalOutput = textResponse; // Default to text response
 
-
-
-
-
         switch (promptType) {
             case PromptType.AUDIO:
-                finalOutput = await convertTextToAudio(textResponse);
-                res.write(`data: ${JSON.stringify({ message: "Audio conversion complete." })}\n\n`);
-                break;
+                // Stream audio response
+                const audioStream = await convertTextToAudioStream(textResponse);
+                res.setHeader("Content-Type", "audio/mpeg"); // Set the appropriate content type for audio
+                res.setHeader("Cache-Control", "no-cache");
+                res.setHeader("Connection", "keep-alive");
+
+                for await (const chunk of audioStream) {
+                    res.write(chunk);
+                }
+                res.end();
+                return; // Exit the function after streaming audio
 
             case PromptType.VIDEO:
                 finalOutput = await convertTextToVideo(textResponse);
                 res.write(`data: ${JSON.stringify({ message: "Video conversion complete." })}\n\n`);
-                break;
-
-            case PromptType.LINKEDIN_PROFILE:
-                finalOutput = await convertTextToVideo(textResponse);
-                res.write(`data: ${JSON.stringify({ message: "LinkedIn profile video conversion complete." })}\n\n`);
                 break;
 
             case PromptType.TEXT:
@@ -128,9 +122,6 @@ export const GetPrompt = async (req: AuthenticatedRequest, res: Response, next: 
             default:
                 throw new Error("Unsupported response type.");
         }
-
-
-
 
         // Save the final output to Firebase
         const newReply = {
@@ -157,13 +148,18 @@ export const GetPrompt = async (req: AuthenticatedRequest, res: Response, next: 
     }
 };
 
-
 /**
- * Convert text to audio
+ * Convert text to audio stream using OpenAI's TTS API
  */
-async function convertTextToAudio(text: string): Promise<string> {
-    // Implement text-to-audio conversion logic here
-    return "Audio conversion placeholder";
+async function convertTextToAudioStream(text: string): Promise<AsyncIterable<Uint8Array>> {
+    const mp3 = await openai.audio.speech.create({
+        model: "tts-1",
+        voice: "alloy", // Choose a voice: alloy, echo, fable, onyx, nova, or shimmer
+        input: text,
+        response_format: "mp3", // Stream as MP3
+    });
+
+    return mp3.body as unknown as AsyncIterable<Uint8Array>;
 }
 
 /**
@@ -171,5 +167,5 @@ async function convertTextToAudio(text: string): Promise<string> {
  */
 async function convertTextToVideo(text: string): Promise<string> {
     // Implement text-to-video conversion logic here
-    return "Video conversion placeholder";
+    return "Video conversion Url";
 }

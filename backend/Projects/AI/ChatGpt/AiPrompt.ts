@@ -10,7 +10,7 @@ export const chatWithGPT = async function* (userMessage: string, history: any[],
             throw new Error("Missing OpenAI API Key. Please set OPENAI_API_KEY in your environment variables.");
         }
 
-        const formattedPrompt = generatePrompt(userMessage);
+        const formattedPrompt = generatePromptBasedOnPromptType(userMessage,promptType);
 
         const messages = [
             ...history, // Include previous messages
@@ -37,11 +37,26 @@ export const chatWithGPT = async function* (userMessage: string, history: any[],
 };
 
 /**
- * Function to generate a LinkedIn post prompt based on JSON data.
+ * Function to generate a prompt based on the prompt type and user message.
  */
-function generatePrompt(userMessage: any): string {
-    return `
-General Information ${userMessage || "General Information"}
-`;
-}
+export function generatePromptBasedOnPromptType(userMessage: any, promptType: PromptType): string {
+    switch (promptType) {
+        case PromptType.TEXT:
+            return `Generate a detailed text response for the following input: ${userMessage}`;
 
+        case PromptType.AUDIO:
+            return `Convert the following text into an audio-friendly format, ensuring it is clear and concise: ${userMessage}`;
+
+        case PromptType.VIDEO:
+            return `Create a video script based on the following text. Include scene descriptions and dialogue where necessary: ${userMessage}`;
+
+        case PromptType.LINKEDIN_PROFILE:
+            return `Generate a professional LinkedIn profile summary based on the following information. Highlight key skills, experiences, and achievements: ${userMessage}`;
+
+        case PromptType.LINKEDIN_POST:
+            return `Create an engaging LinkedIn post based on the following content. Ensure it is professional, concise, and includes a call-to-action: ${userMessage}`;
+  
+        default:
+            throw new Error("Unsupported prompt type.");
+    }
+}
