@@ -192,7 +192,7 @@ async function convertTextToVideoStream(text: string): Promise<string | null> {
             body: JSON.stringify({
                 model: "lipsync-1.7.1",
                 input: [
-                    { type: "video", url: "your-video-url" },
+                    { type: "video", url: "https://prod-private-sync-user-inputs.s3.us-east-1.amazonaws.com/org-ebde417a-2179-4847-b0f5-fe04249630f3/user-ebde417a-2179-4847-b0f5-fe04249630f3/video-input-1739625585.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAWHRN73AZOHOWI6XJ%2F20250215%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250215T131954Z&X-Amz-Expires=604800&X-Amz-Signature=778816fe5fde444632fb54ac533513cfc39b2231a3324c3abe2d647c4dd9f26a&X-Amz-SignedHeaders=host&x-id=GetObject" },
                     { type: "audio", url: textUrl }, // Pass text file URL here
                 ],
                 options: { output_format: "mp4", output_resolution: [1280, 720] },
@@ -255,16 +255,6 @@ async function pollForVideoCompletion(jobId: string, maxRetries = 50, delay = 50
     console.error("Video processing timed out.");
     return null;
 }
-
-
-/**
- * Convert text to video
- */
-async function convertTextToVideo(text: string): Promise<string> {
-    // Implement text-to-video conversion logic here
-    return "Video conversion Url";
-}
-
 
 
 /**
