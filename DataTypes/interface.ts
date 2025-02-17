@@ -13,6 +13,7 @@ export interface Config {
     pinataApiKey: string;
     pinataApiSecret: string;
     openAiApiKey:string;
+    lipSyncApiKey:string;
     deepseekApiKey:string;
     geminiApiKey:string;
 

@@ -18,6 +18,7 @@ const config: Config = {
   openAiApiKey: process.env.OPENAI_API_KEY || "",
   deepseekApiKey: process.env.DEEPSEEK_API_KEY || "",
   geminiApiKey: process.env.GEMINI_API_KEY || "",
+  lipSyncApiKey: process.env.LIP_SYNC_API_KEY || "",
 
   // Razorpay Payment Config
   razorpayKeyId: process.env.RAZORPAY_KEY_ID || "",

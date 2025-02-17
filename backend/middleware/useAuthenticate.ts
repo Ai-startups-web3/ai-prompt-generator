@@ -6,7 +6,8 @@ const firebaseCredentials = JSON.parse(config.firebaseCred);
 
 admin.initializeApp({
     credential: admin.credential.cert(firebaseCredentials),
-    databaseURL: "https://ai-prompyt.firebaseapp.com"
+    databaseURL: "https://ai-prompyt.firebaseapp.com",
+    storageBucket: "ai-prompyt.firebasestorage.app",
   });
 
 

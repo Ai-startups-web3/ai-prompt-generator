@@ -27,6 +27,7 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "ts-node": "^10.9.2",
+    "ws": "^8.18.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {

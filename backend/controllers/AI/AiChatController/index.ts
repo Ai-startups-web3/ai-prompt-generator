@@ -97,7 +97,7 @@ export const GetPrompt = async (req: AuthenticatedRequest, res: Response, next: 
         let finalOutput = textResponse; // Default to text response
 
         switch (promptType) {
-            case PromptType.VIDEO:
+            case PromptType.AUDIO:
                 // Stream audio response
                 const audioStream = await convertTextToAudioStream(textResponse);
                 res.setHeader("Content-Type", "audio/mpeg"); // Set the appropriate content type for audio
@@ -110,10 +110,15 @@ export const GetPrompt = async (req: AuthenticatedRequest, res: Response, next: 
                 res.end();
                 return; // Exit the function after streaming audio
 
-            case PromptType.AUDIO:
-                finalOutput = await convertTextToVideo(textResponse);
-                res.write(`data: ${JSON.stringify({ message: "Video conversion complete." })}\n\n`);
-                break;
+                case PromptType.VIDEO:
+                    const videoUrl = await convertTextToVideoStream(textResponse);
+                    if (videoUrl) {
+                        res.write(`data: ${JSON.stringify({ message: "Video conversion complete.", videoUrl })}\n\n`);
+                    } else {
+                        res.write(`data: ${JSON.stringify({ error: "Video conversion failed." })}\n\n`);
+                    }
+                    break;
+                
 
             case PromptType.TEXT:
                 // No further processing needed, already streamed
@@ -167,6 +172,90 @@ async function convertTextToAudioStream(text: string): Promise<AsyncIterable<Uin
 
     return mp3.body as unknown as AsyncIterable<Uint8Array>;
 }
+/**
+ * Convert text to video stream using OpenAI's TTS API
+ */
+async function convertTextToVideoStream(text: string): Promise<string | null> {
+    try {
+        const textUrl = await uploadTextToStorage(text); // Upload text and get the storage URL
+
+        console.log("textUrl");
+        console.log(textUrl);
+        
+        
+        const options = {
+            method: "POST",
+            headers: {
+                "x-api-key": config.lipSyncApiKey,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                model: "lipsync-1.7.1",
+                input: [
+                    { type: "video", url: "your-video-url" },
+                    { type: "audio", url: textUrl }, // Pass text file URL here
+                ],
+                options: { output_format: "mp4", output_resolution: [1280, 720] },
+                webhookUrl: "https://your-server.com/webhook",
+            }),
+        };
+
+        const response = await fetch("https://api.sync.so/v2/generate", options);
+        const data = await response.json();
+
+        if (!data.id) {
+            console.error("Error: No valid ID returned from API.");
+            return null;
+        }
+
+        console.log(`Video processing started with ID: ${data.id}`);
+
+        // Poll the API to check if the video is ready
+        return await pollForVideoCompletion(data.id);
+    } catch (error) {
+        console.error("Error in convertTextToVideoStream:", error);
+        return null;
+    }
+}
+
+/**
+ * Polls the API until the video processing is complete
+ */
+async function pollForVideoCompletion(jobId: string, maxRetries = 50, delay = 5000): Promise<string | null> {
+    const url = `https://api.sync.so/v2/generate/${jobId}`;
+
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+        await new Promise((resolve) => setTimeout(resolve, delay)); // Wait before retrying
+
+        try {
+            const response = await fetch(url, {
+                method: "GET",
+                headers: {
+                    "x-api-key": config.lipSyncApiKey,
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const data = await response.json();
+
+            if (data.status === "COMPLETED" && data.outputUrl) {
+                console.log("Video is ready:", data.outputUrl);
+                return data.outputUrl;
+            } else if (data.status === "FAILED") {
+                console.error("Video processing failed:", data.error);
+                return null;
+            }
+
+            console.log(`Video processing status: ${data.status}, retrying...`);
+        } catch (error) {
+            console.error("Error polling for video completion:", error);
+        }
+    }
+
+    console.error("Video processing timed out.");
+    return null;
+}
+
 
 /**
  * Convert text to video
@@ -174,4 +263,29 @@ async function convertTextToAudioStream(text: string): Promise<AsyncIterable<Uin
 async function convertTextToVideo(text: string): Promise<string> {
     // Implement text-to-video conversion logic here
     return "Video conversion Url";
+}
+
+
+
+/**
+ * Upload text to Firebase Storage and get a downloadable URL
+ */
+async function uploadTextToStorage(text: string): Promise<string> {
+    const bucket = admin.storage().bucket();
+    const fileName = `texts/${Date.now()}.txt`; // Unique file name
+    const file = bucket.file(fileName);
+
+    await file.save(text, {
+        metadata: {
+            contentType: "text/plain", // Set the content type
+        },
+    });
+
+    // Generate a signed URL (valid for 7 days)
+    const [url] = await file.getSignedUrl({
+        action: "read",
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // URL expires in 7 days
+    });
+
+    return url;
 }
