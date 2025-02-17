@@ -118,6 +118,12 @@ export const GetPrompt = async (req: AuthenticatedRequest, res: Response, next: 
             case PromptType.TEXT:
                 // No further processing needed, already streamed
                 break;
+            case PromptType.LINKEDIN_PROFILE:
+                // No further processing needed, already streamed
+                break;
+            case PromptType.LINKEDIN_POST:
+                // No further processing needed, already streamed
+                break;
 
             default:
                 throw new Error("Unsupported response type.");

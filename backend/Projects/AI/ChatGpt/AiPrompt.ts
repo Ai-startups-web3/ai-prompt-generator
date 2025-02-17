@@ -45,7 +45,7 @@ export function generatePromptBasedOnPromptType(userMessage: any, promptType: Pr
             return `Generate a detailed text response for the following input: ${userMessage}`;
 
         case PromptType.AUDIO:
-            return `Convert the following text into an audio-friendly format, ensuring it is clear and concise: ${userMessage}`;
+            return `Convert the following text into an audio-friendly format, ensuring it is clear and concise: ${userMessage}. Directely start the answer and user interaction.`
 
         case PromptType.VIDEO:
             return `Create a video script based on the following text. Include scene descriptions and dialogue where necessary: ${userMessage}`;
