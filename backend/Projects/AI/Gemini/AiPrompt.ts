@@ -48,7 +48,7 @@ export function generatePromptBasedOnPromptType(userMessage: any, promptType: Pr
             return `Convert the following text into an audio-friendly format, ensuring it is clear and concise: ${userMessage}`;
 
         case PromptType.VIDEO:
-            return `Create a video script based on the following text. Include scene descriptions and dialogue where necessary: ${userMessage}`;
+            return `Be a specialist based on user Input. Be casual and answer the user like a human: ${userMessage}`;
 
         case PromptType.LINKEDIN_PROFILE:
             return `Generate a professional LinkedIn profile summary based on the following information. Highlight key skills, experiences, and achievements: ${userMessage}`;
