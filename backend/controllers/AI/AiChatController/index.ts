@@ -97,7 +97,7 @@ export const GetPrompt = async (req: AuthenticatedRequest, res: Response, next: 
         let finalOutput = textResponse; // Default to text response
 
         switch (promptType) {
-            case PromptType.AUDIO:
+            case PromptType.VIDEO:
                 // Stream audio response
                 const audioStream = await convertTextToAudioStream(textResponse);
                 res.setHeader("Content-Type", "audio/mpeg"); // Set the appropriate content type for audio
@@ -110,7 +110,7 @@ export const GetPrompt = async (req: AuthenticatedRequest, res: Response, next: 
                 res.end();
                 return; // Exit the function after streaming audio
 
-                case PromptType.VIDEO:
+                case PromptType.AUDIO:
                     const videoUrl = await convertTextToVideoStream(textResponse);
                     if (videoUrl) {
                         res.write(`data: ${JSON.stringify({ message: "Video conversion complete.", videoUrl })}\n\n`);
