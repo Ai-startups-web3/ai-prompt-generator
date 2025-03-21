@@ -8,6 +8,7 @@ import router,{ initializeRootAdmin } from "./backend";
 import { authApi } from "./auth";
 import cors from 'cors';
 import { setupSwagger } from './swagger';
+import * as functions from "firebase-functions";
 
 const app = express();
 const { port, env, rootAdmin, rootPassword } = config;
@@ -32,7 +33,7 @@ app.use("/auth", authApi);
 // Initialize Admin
 initializeRootAdmin(rootAdmin, rootPassword);
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port} in ${env} mode`);
-});
+
+
+// Export as a Firebase Cloud Function
+export const api = functions.https.onRequest(app);

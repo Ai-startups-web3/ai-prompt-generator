@@ -23,7 +23,7 @@ const config: Config = {
   // Razorpay Payment Config
   razorpayKeyId: process.env.RAZORPAY_KEY_ID || "",
   razorpayKeySecret: process.env.RAZORPAY_KEY_SECRET || "",
-  firebaseCred: process.env.FIREBASE_CREDENTIALS || "",
+  firebaseCred: process.env.AI_FIREBASE_CREDENTIALS || "",
 }
 
 export default config;
