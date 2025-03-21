@@ -14,7 +14,7 @@ export const chatWithGPT = async function* (userMessage: string, history: any[],
 
         const messages = [
             ...history, // Include previous messages
-            { role: "user", content: formattedPrompt }
+            { role: "user", content: userMessage }
         ];
 
         const stream = await openai.chat.completions.create({
